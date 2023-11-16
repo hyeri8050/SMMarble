@@ -13,6 +13,23 @@
 #define MAX_GRADE       9
 #define MAX_NODE        100
 
+//유형에 대한 2차원 배열 정의 
+static char smmNodeName[SMMNODE_TYPE_MAX ][MAX_CHARNAME] = {
+       "lecture",
+       "restaurant",
+       "laboratory",
+       "home",
+       "gotoLab",
+       "foodChance",
+       "festival"
+};
+
+//enum to string
+char* smmObj_getTypeName(int type)
+{
+      return (char*)smmNodeName[type];
+}
+ 
 //smmObj안에 있는 전역 변수 선언 및 배열화  
 static char smmObj_name [MAX_NODE][MAX_CHARNAME]; 
 static int smmObj_type[MAX_NODE];
