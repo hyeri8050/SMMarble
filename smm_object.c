@@ -4,6 +4,7 @@
 //
 //  Created by Juyeop Kim on 2023/11/05.
 //
+//보드의 노드, 음식카드, 축제카드, 각 플레이어의 수강 강의 이력 저장 DB 
 
 #include "smm_common.h"
 #include "smm_object.h"
@@ -14,7 +15,7 @@
 #define MAX_NODE        100
 
 //유형에 대한 2차원 배열 정의 
-static char smmNodeName[SMMNODE_TYPE_MAX ][MAX_CHARNAME] = {
+static char smmNodeName[SMMNODE_TYPE_MAX][MAX_CHARNAME] = {
        "lecture",
        "restaurant",
        "laboratory",
@@ -33,15 +34,17 @@ char* smmObj_getTypeName(int type)
 //1. 구조체 형식 정의 
 typedef struct smmObject{
     char name[MAX_CHARNAME];
+    smmObjType_e objType;
     int type;
     int credit;
     int energy;
+    smmObjGrade_e grade;
 } smmObject_t;
 
-//2. 구조체 배열 변수 정의 
-smmObject_t smm_node[MAX_NODE];
+//2. 구조체 변수 정의 
+//smmObject_t smm_node[MAX_NODE];
+//static int smmObj_noNode = 0;
 
-static int smmObj_noNode = 0;
 
 #if 0
 //smmObj안에 있는 전역 변수 선언 및 배열화 => 11.30 구조체화로 변경하기  
@@ -52,51 +55,98 @@ static int smmObj_energy[MAX_NODE];
 static int smmObj_noNode = 0;
 #endif
 
+//3.관련 함수 변경 
 //object generation (Node 만들기, 즉 main.c에 전달) 
-void smmObj_genNode(char* name, int type, int credit, int energy)
+void* smmObj_genObject(char* name, smmObjType_e objType, int type, int credit, int energy, smmObjGrade_e grade)
 {
-    #if 0
-    //strcpy (대상, 원본)  
-    strcpy (smmObj_type[smmObj_noNode], name); //문자열(배열 복사) -> 하나씩 복사  
-    smmObj_type[smmObj_noNode] = type; //갖고 있는 배열에 입력된 type값을 넣음 
-    smmObj_credit[smmObj_noNode] = credit;
-    smmObj_energy[smmObj_noNode] = energy;
-    #endif
-    strcpy(smm_node[smmObj_noNode].name, name);
-    smm_node[smmObj_noNode].type, type);
-    smm_node[smmObj_noNode].credit, credit);
-    smm_node[smmObj_noNode].energy, );
+    smmObject_t* ptr;
     
-    //static int smmObj_noNode++; 
-    smmObj_noNode++;
+    ptr = (smmObject_t*)malloc(sizeof(smmObject_t));
+     
+    strcpy (ptr->name, name);  
+    ptr->objType = objType; 
+    ptr->type = type;
+    ptr->credit = credit;
+    ptr->energy = energy;
+    ptr->grade = grade;
+    
+    return ptr;
+
 }
-//name
-char* smmObj_getNodeName(int node_nr)
+
+//Node 생성 
+void smmObj_genNode(char *name, int type, int credit, int energy) 
 {
-      return smm_node[node_nr].name;
+    // Create a new node and add it to the database
+    void *nodePtr = smmObj_genObject(name, smmObjType_board, type, credit, energy, smmObjGrade_Ap);
+    smmdb_addTail(0, nodePtr);
+}
+
+
+//name
+char* smmObj_getNodeName(void *obj)
+{
+      smmObject_t* ptr = (smmObject_t*)obj;
+      
+      return ptr->name; //외부에 구조체 정의를 유출하지도 않을 수 O 
       //smmObj_noNode];
 }
  
 //type
-int smmObj_getNodeType(int node_nr)
+int smmObj_getNodeType(void *obj)
 {
+    smmObject_t* ptr = (smmObject_t*)obj;
     //return smmObj_type[node_nr];
-    return smm_node[node_nr].type;
+    return ptr->type;
 }
 
 //credit
-int smmObj_getNodeCredit(int node_nr)
+int smmObj_getNodeCredit(void *obj)
 {
+    smmObject_t* ptr = (smmObject_t*)obj;
     //return smmObj_credit[node_nr];
-    return smm_node[node_nr].credit;
+    return ptr->credit;
 }
 
 //energy
-int smmObj_getNodeEnergy(int node_nr)
+int smmObj_getNodeEnergy(void *obj)
 {
+    smmObject_t* ptr = (smmObject_t*)obj;
     //return smmObj_energy[node_nr];
-    return smm_node[node_nr].energy;
+    return ptr->energy;
     
+}
+
+//grade
+int smmObj_getNodeGrade(void *obj) {
+    smmObject_t* ptr = (smmObject_t*)obj;
+    return ptr->grade;
+}
+
+const char* smmObj_getGradeName(smmObjGrade_e grade) {
+    // 여기에 해당 학점에 대한 문자열 반환
+    switch (grade) {
+        case smmObjGrade_Ap:
+            return "A+";
+        case smmObjGrade_A0:
+            return "A0";
+        case smmObjGrade_Am:
+            return "A-";
+        case smmObjGrade_Bp:
+            return "B+";
+        case smmObjGrade_B0:
+            return "B0";
+        case smmObjGrade_Bm:
+            return "B-";
+        case smmObjGrade_Cp:
+            return "C+";
+        case smmObjGrade_C0:
+            return "C0";
+        case smmObjGrade_Cm:
+            return "C-";
+        default:
+            return "Unknown Grade";
+    } 
 }
 
 //member retrieving
@@ -104,13 +154,8 @@ int smmObj_getNodeEnergy(int node_nr)
 
 
 //element to string
-char* smmObj_getNodeName(smmNode_e type)
-{
-    return smmNodeName[type];
-}
 
-char* smmObj_getGradeName(smmGrade_e grade)
-{
-    return smmGradeName[grade];
-}
-#endif
+
+
+
+
