@@ -149,31 +149,6 @@ const char* smmObj_getGradeName(smmObjGrade_e grade) {
     } 
 }
 
-// 학점 종류에 따른 값 반환 함수
-float smmObj_getGradeValue(smmObjGrade_e grade) {
-    switch (grade) {
-        case smmObjGrade_Ap:
-            return 4.3;
-        case smmObjGrade_A0:
-            return 4.0;
-        case smmObjGrade_Am:
-            return 3.7;
-        case smmObjGrade_Bp:
-            return 3.4;
-        case smmObjGrade_B0:
-            return 3.1;
-        case smmObjGrade_Bm:
-            return 2.8;
-        case smmObjGrade_Cp:
-            return 2.5;
-        case smmObjGrade_C0:
-            return 2.2;
-        case smmObjGrade_Cm:
-            return 1.9;
-        default:
-            return -1.0; // 예외 처리: 알 수 없는 학점에 대한 값
-    }
-}
 
 //member retrieving
 

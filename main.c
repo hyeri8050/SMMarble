@@ -200,6 +200,7 @@ int FoodChargeConfig(void) {
     }
 
     fclose(foodConfigFile);
+    
     return charge;
 }
 
@@ -257,7 +258,7 @@ void actionNode(int player)
         case SMMNODE_TYPE_RESTAURANT:
             // 식당 노드일 경우, 보충 에너지만큼 플레이어의 현재 에너지에 더함
             cur_player[player].energy += smmObj_getNodeEnergy(boardPtr);
-            printf("%s visited a restaurant and gained %d energy. Current energy: %d\n", cur_player[player].name, smmObj_getNodeEnergy(boardPtr), cur_player[player].energy);
+            printf("%s : Let's eat/drink in %s and charge %d energies. (remained energy :%d)\n", cur_player[player].name, smmObj_getNodeName(boardPtr), smmObj_getNodeEnergy(boardPtr), cur_player[player].energy);
             break;
 
         case SMMNODE_TYPE_LABORATORY:
@@ -296,9 +297,19 @@ void actionNode(int player)
             break;
 
         case SMMNODE_TYPE_FOODCHANCE: {
-            int foodCharge = FoodChargeConfig();
-            cur_player[player].energy += foodCharge;
-            printf("%s got a food chance and gained %d energy. Current energy: %d\n", cur_player[player].name, foodCharge, cur_player[player].energy);
+            int charge = FoodChargeConfig();
+            // 플레이어의 에너지를 보충
+            cur_player[player].energy += charge;
+        
+            // 메시지 출력
+            printf("-> %s gets a food chance! Press any key to pick a food card: ", cur_player[player].name);
+        
+            // 아무 키나 입력 받기
+            getchar();
+        
+            // 결과 출력
+            printf("-> %s picks %s and charges %d (remained energy: %d)\n",
+                   cur_player[player].name, smmObj_getNodeName(boardPtr), charge, cur_player[player].energy);
             break; 
         }
 
@@ -390,6 +401,33 @@ smmObjGrade_e takeLecture(int player, char *lectureName, int credit) {
         printf("Player %s drops the lecture %s!\n", cur_player[player].name, lectureName);
     }
 }
+
+// 학점 종류에 따른 값 반환 함수 => 누적 학점의 평균 학점 출력을 위해 필요  
+float smmObj_getGradeValue(smmObjGrade_e grade) {
+    switch (grade) {
+        case smmObjGrade_Ap:
+            return 4.3;
+        case smmObjGrade_A0:
+            return 4.0;
+        case smmObjGrade_Am:
+            return 3.7;
+        case smmObjGrade_Bp:
+            return 3.4;
+        case smmObjGrade_B0:
+            return 3.1;
+        case smmObjGrade_Bm:
+            return 2.8;
+        case smmObjGrade_Cp:
+            return 2.5;
+        case smmObjGrade_C0:
+            return 2.2;
+        case smmObjGrade_Cm:
+            return 1.9;
+        default:
+            return 0; // 예외 처리: 알 수 없는 학점에 대한 값
+    }
+}
+
 
 // 주어진 플레이어의 수강한 강의의 평균 학점 계산
 float calcAverageGrade(int player) {
