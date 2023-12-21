@@ -3,8 +3,8 @@
 //  SMMarble
 //
 //  Created by Juyeop Kim on 2023/11/05.
-//
-//보드의 노드, 음식카드, 축제카드, 각 플레이어의 수강 강의 이력 저장 DB 
+//  Completed by Hyeri Park on 2023/12/21
+//  보드의 노드, 음식카드, 축제카드, 각 플레이어의 수강 강의 이력 저장 DB 
 
 #include "smm_common.h"
 #include "smm_object.h"
@@ -31,7 +31,7 @@ char* smmObj_getTypeName(int type)
       return (char*)smmNodeName[type];
 }
 
-//1. 구조체 형식 정의 
+//구조체 형식 정의 
 typedef struct smmObject{
     char name[MAX_CHARNAME];
     smmObjType_e objType;
@@ -41,21 +41,6 @@ typedef struct smmObject{
     smmObjGrade_e grade;
 } smmObject_t;
 
-//2. 구조체 변수 정의 
-//smmObject_t smm_node[MAX_NODE];
-//static int smmObj_noNode = 0;
-
-
-#if 0
-//smmObj안에 있는 전역 변수 선언 및 배열화 => 11.30 구조체화로 변경하기  
-static char smmObj_name [MAX_NODE][MAX_CHARNAME]; 
-static int smmObj_type[MAX_NODE];
-static int smmObj_credit[MAX_NODE];
-static int smmObj_energy[MAX_NODE];
-static int smmObj_noNode = 0;
-#endif
-
-//3.관련 함수 변경 
 //object generation (Node 만들기, 즉 main.c에 전달) 
 void* smmObj_genObject(char* name, smmObjType_e objType, int type, int credit, int energy, smmObjGrade_e grade)
 {
@@ -148,15 +133,3 @@ const char* smmObj_getGradeName(smmObjGrade_e grade) {
             return "Unknown Grade";
     } 
 }
-
-
-//member retrieving
-
-
-
-//element to string
-
-
-
-
-
