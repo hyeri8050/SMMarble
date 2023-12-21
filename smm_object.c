@@ -3,7 +3,7 @@
 //  SMMarble
 //
 //  Created by Juyeop Kim on 2023/11/05.
-//  Completed by Hyeri Park on 2023/12/21
+//  Completed by Hyeri Park on 2023/12/21.
 //  보드의 노드, 음식카드, 축제카드, 각 플레이어의 수강 강의 이력 저장 DB 
 
 #include "smm_common.h"

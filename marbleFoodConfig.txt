@@ -1,0 +1,14 @@
+0. 치킨, charge:10
+1. 맥주, charge:-2
+2. 탕후루, charge:3
+3. 컵라면, charge:2
+4. 감자탕, charge:15
+5. 컵밥, charge:5
+6. 짜장면, charge:12
+7. 학식, charge:11
+8. 파스타, charge:13
+9. 피자, charge:7
+10. 햄버거, charge:8
+11. 샌드위치, charge:8
+12. 요거트, charge:4
+13. 비빔밥, charge:10
